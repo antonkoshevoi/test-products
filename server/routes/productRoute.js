@@ -10,6 +10,7 @@ const {
   createProduct,
   getAdminProducts,
   getProducts,
+  getProductsByIds
 } = require("../controllers/productController");
 const {
   isAuthenticatedUser,
@@ -34,6 +35,7 @@ router
   .delete(isAuthenticatedUser, authorizeRoles("admin"), deleteProduct);
 
 router.route("/product/:id").get(getProductDetails);
+router.route("/products-by-id").get(getProductsByIds);
 
 router.route("/review").put(isAuthenticatedUser, createProductReview);
 

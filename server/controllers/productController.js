@@ -54,6 +54,26 @@ exports.getProductDetails = asyncErrorHandler(async (req, res, next) => {
   });
 });
 
+// Get Products by multiple ids
+exports.getProductsByIds = asyncErrorHandler(async (req, res, next) => {
+  const { ids } = req.body;
+
+  if (!ids || !Array.isArray(ids) || ids.length === 0) {
+    return next(new ErrorHandler("Please provide an array of IDs", 400));
+  }
+
+  const products = await Product.find({ _id: { $in: ids } });
+
+  if (products.length === 0) {
+    return next(new ErrorHandler("No products found for the provided IDs", 404));
+  }
+
+  res.status(200).json({
+    success: true,
+    products,
+  });
+});
+
 // Get All Products ---ADMIN
 exports.getAdminProducts = asyncErrorHandler(async (req, res, next) => {
   const products = await Product.find();
